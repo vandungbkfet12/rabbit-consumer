@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "Zjv53/x8zzxdAo+ScBStIr66auF7q6IcfjDTPMRIrU83XZKGY0iayb20cy8f2hJcBIrRDcXzk2RiP+FO7KFHLQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\phamvandung\\source\\repos\\RabbitConsumer\\RabbitConsumer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\phamvandung\\.nuget\\packages\\csvhelper\\15.0.5\\csvhelper.15.0.5.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\phamvandung\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\phamvandung\\.nuget\\packages\\rabbitmq.client\\6.1.0\\rabbitmq.client.6.1.0.nupkg.sha512",
+    "C:\\Users\\phamvandung\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\phamvandung\\.nuget\\packages\\system.threading.channels\\4.7.1\\system.threading.channels.4.7.1.nupkg.sha512"
+  ],
+  "logs": []
+}
