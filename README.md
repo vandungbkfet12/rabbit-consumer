@@ -1,4 +1,4 @@
-# rabbit-consuer
+# rabbit-consumer
 
 An application for testing Rabbitmq
 
