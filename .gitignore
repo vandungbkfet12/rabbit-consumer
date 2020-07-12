@@ -1,0 +1,11 @@
+﻿/.vs
+/RabbitConsumer/*.user
+/RabbitConsumer/bin
+/RabbitConsumer/obj
+/RabbitConsumer/Properties
+/RabbitConsumer/publish
+*.idea
+/RabbitConsumer/Logs
+.DS_Store
+*.user
+/.vscode

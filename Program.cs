@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -14,20 +15,31 @@ namespace RabbitConsumer
 {
     class Program
     {
-        private static string HOSTNAME = "localhost";
-        private static string QUEUENAME = "test";
 
         static void Main(string[] args)
         {
             try
             {
 
+            //load configuration
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+
+            var configuration = builder.Build();
+            var hostName = configuration["HostName"];
+            var port = int.Parse(configuration["Port"]);
+            var userName = configuration["UserName"];
+            var password = configuration["Password"];
+            var queueName = configuration["QueueName"];
+            var csvFileName = configuration["CsvFileName"];
+
             //Init rabbitmq connection
-            var factory = new ConnectionFactory() { HostName = HOSTNAME };
+            var factory = new ConnectionFactory() { HostName = hostName, Port = port, UserName = userName, Password = password };
             var rabbitMqConnection = factory.CreateConnection();
             var rabbitMqChannel = rabbitMqConnection.CreateModel();
 
-            rabbitMqChannel.QueueDeclare(queue: QUEUENAME,
+            rabbitMqChannel.QueueDeclare(queue: queueName,
                                  durable: false,
                                  exclusive: false,
                                  autoDelete: false,
@@ -35,7 +47,7 @@ namespace RabbitConsumer
 
             rabbitMqChannel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-            int messageCount = Convert.ToInt16(rabbitMqChannel.MessageCount(QUEUENAME));
+            int messageCount = Convert.ToInt16(rabbitMqChannel.MessageCount(queueName));
             Console.WriteLine(" Listening to the queue. This channels has {0} messages on the queue", messageCount);
 
             var consumer = new EventingBasicConsumer(rabbitMqChannel);
@@ -47,7 +59,7 @@ namespace RabbitConsumer
                 var receivedJob = JsonConvert.DeserializeObject<ReceivedJob>(message);
 
                 //Write CSV
-                string path = string.Format("{0}\\test.csv", System.AppContext.BaseDirectory);
+                string path = string.Format("{0}\\{1}.csv", System.AppContext.BaseDirectory, csvFileName);
                 var str = string.Format("{0},{1},{2}", receivedJob.clientId, receivedJob.timestamps, DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")); 
                 var csv = new StringBuilder();
                 csv.AppendLine(str);
@@ -64,7 +76,7 @@ namespace RabbitConsumer
                 rabbitMqChannel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                 Thread.Sleep(1000);
             };
-            rabbitMqChannel.BasicConsume(queue: QUEUENAME,
+            rabbitMqChannel.BasicConsume(queue: queueName,
                                  autoAck: false,
                                  consumer: consumer);
 
@@ -76,6 +88,8 @@ namespace RabbitConsumer
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.WriteLine("Please re-check rabbitmq connection configuration in appsetting.json!");
+                Console.ReadLine();
             }
         }
  
